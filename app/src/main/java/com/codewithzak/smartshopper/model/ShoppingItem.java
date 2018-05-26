@@ -6,7 +6,7 @@ public final class ShoppingItem {
 
     private double count;
 
-    private boolean archived;
+    private boolean checked;
 
     public ShoppingItem(final String name) {
         this.name = name;
@@ -18,9 +18,9 @@ public final class ShoppingItem {
         this.count = count;
     }
 
-    public ShoppingItem(final String name, final boolean archived) {
+    public ShoppingItem(final String name, final boolean checked) {
         this(name);
-        this.archived = archived;
+        this.checked = checked;
     }
 
     public String getName() {
@@ -31,11 +31,11 @@ public final class ShoppingItem {
         return count;
     }
 
-    public boolean isArchived() {
-        return archived;
+    public boolean isChecked() {
+        return checked;
     }
 
-    public void setArchived(boolean archived) {
-        this.archived = archived;
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

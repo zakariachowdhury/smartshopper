@@ -12,13 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
+import android.widget.ExpandableListView;
 
-import com.codewithzak.smartshopper.adapter.ShoppingListViewAdapter;
+import com.codewithzak.smartshopper.adapter.ShoppingExpandableListViewAdapter;
 import com.codewithzak.smartshopper.model.ShoppingItem;
 import com.codewithzak.smartshopper.service.ShoppingListService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -26,7 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, ShoppingExpandableListViewAdapter.OnClickListener {
 
     @BindView(R.id.fab)
     protected FloatingActionButton addFab;
@@ -40,12 +39,13 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.nav_view)
     protected NavigationView navigationView;
 
-    @BindView(R.id.shoppingListView)
-    protected ListView shoppingListView;
+    @BindView(R.id.expandableListView)
+    protected ExpandableListView expandableListView;
 
     private ShoppingListService shoppingListService;
 
-    private ShoppingListViewAdapter shoppingListViewAdapter;
+    private ShoppingExpandableListViewAdapter expandableListViewAdapter;
+    private List<ShoppingItem> shoppingItemList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +67,10 @@ public class MainActivity extends AppCompatActivity
 
     private void initializeShoppingListView() {
         shoppingListService = new ShoppingListService();
-        shoppingListViewAdapter = new ShoppingListViewAdapter(this, shoppingListService.getItems(false));
-        shoppingListView.setAdapter(shoppingListViewAdapter);
+        shoppingItemList = shoppingListService.getAllItems();
+        expandableListViewAdapter = new ShoppingExpandableListViewAdapter(this, shoppingItemList, this);
+        expandableListView.setAdapter(expandableListViewAdapter);
+        expandableListView.expandGroup(0);
     }
 
     @Override
@@ -130,5 +132,13 @@ public class MainActivity extends AppCompatActivity
     public void onAddFabTapped(final View view) {
         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
+    }
+
+    @Override
+    public void onClickCheckBox(int position, boolean checked) {
+        if (shoppingItemList != null) {
+            shoppingItemList.get(position).setChecked(checked);
+            expandableListViewAdapter.notifyDataSetChanged();
+        }
     }
 }

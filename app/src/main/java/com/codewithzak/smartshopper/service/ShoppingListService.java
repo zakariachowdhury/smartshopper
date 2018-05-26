@@ -15,12 +15,17 @@ public class ShoppingListService {
         allItems.add(new ShoppingItem("Egg", 6));
         allItems.add(new ShoppingItem("Banana", true));
         allItems.add(new ShoppingItem("Cookie", true));
+
     }
 
-    public List<ShoppingItem> getItems(boolean archived) {
+    public List<ShoppingItem> getAllItems() {
+        return allItems;
+    }
+
+    public List<ShoppingItem> getItems(boolean checked) {
         List<ShoppingItem> currentItems = new ArrayList();
         for (ShoppingItem item: allItems) {
-            if (item.isArchived() == archived) {
+            if (item.isChecked() == checked) {
                 currentItems.add(item);
             }
         }
